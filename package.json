@@ -2,8 +2,15 @@
   "name": "instock-full-stack-attack-backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "start": "node --watch index.js",
+    "dev": "node --watch index.js"
   },
   "keywords": [],
   "author": "",
