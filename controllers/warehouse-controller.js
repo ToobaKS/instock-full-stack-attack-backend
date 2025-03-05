@@ -52,4 +52,4 @@ const getAll = async (_req, res) => {
 
 
 
-  export { getAll, findOne, deleteWarehouse  };
+  export { getAll, findOne, deleteWarehouse };

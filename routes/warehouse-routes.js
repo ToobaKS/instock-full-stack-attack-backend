@@ -3,10 +3,10 @@ import * as warehouseController from "../controllers/warehouse-controller.js";
 
 const router = express.Router();
 
-router.route("/").get(warehouseController.getAll);
-
-router.route("/:id")
-.get(warehouseController.findOne)
-.delete(warehouseController.deleteWarehouse);
+router.route("/api/warehouses").get(warehouseController.getAll);
+router
+  .route("/api/warehouses/:id")
+  .get(warehouseController.findOne)
+  .delete(warehouseController.deleteWarehouse);
 
 export default router;
