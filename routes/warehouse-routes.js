@@ -1,14 +1,8 @@
 import express from "express";
-import * as userController from "../controllers/user-controller.js";
+import * as warehouseController from "../controllers/warehouse-controller.js";
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(userController.index)
-  .post(userController.add)
-  .delete(userController.remove);
-router.route("/:id").get(userController.findOne).patch(userController.update);
-router.route("/:id/posts").get(userController.posts);
+router.route("/").get(warehouseController.getAll);
 
 export default router;
