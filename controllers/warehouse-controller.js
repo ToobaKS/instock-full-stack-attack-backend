@@ -31,4 +31,25 @@ const getAll = async (_req, res) => {
     }
   };
 
-  export { getAll, findOne };
+  const deleteWarehouse = async(req, res) => {
+    const warehouseId = req.params.id;
+    try {
+      const warehouseFound = await knex("warehouses").where({ id: warehouseId });
+      if (warehouseFound.length === 0) {
+        return res.status(404).json({
+          message:`Warehouse with ID ${warehouseId} not found`,
+        });
+      }
+      await knex("inventories").where({ warehouse_id: warehouseId }).del();
+      await knex("warehouses").where({ id:warehouseId }).del();
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({
+        message: `Unable to delete warehouse with ID ${warehouseId}: ${error}`,
+      });
+    }
+  }
+
+
+
+  export { getAll, findOne, deleteWarehouse  };
