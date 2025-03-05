@@ -6,7 +6,9 @@ const router = express.Router();
 router.route("/api/warehouses").get(warehouseController.getAll);
 router
   .route("/api/warehouses/:id")
-  .get(warehouseController.findOne)
+  .get(warehouseController.findOneWarehouse)
   .delete(warehouseController.deleteWarehouse);
+
+router.route("/api/warehouses/:id/inventories").get(warehouseController.getWareHouseInventory);;
 
 export default router;
