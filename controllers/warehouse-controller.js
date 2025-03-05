@@ -12,7 +12,7 @@ const getAll = async (_req, res) => {
     }
   };
 
-  const findOne = async (req, res) => {
+  const findOneWarehouse = async (req, res) => {
     try {
       const warehouseFound = await knex("warehouses").where({ id: req.params.id });
   
@@ -50,6 +50,20 @@ const getAll = async (_req, res) => {
     }
   }
 
+  const getWareHouseInventory = async (req, res) => {
+    try {
+      const posts = await knex("warehouses")
+        .join("inventories", "inventories.warehouse_id", "warehouses.id")
+        .where({ warehouse_id: req.params.id });
+  
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({
+        message: `Unable to retrieve inventory for warehouse with ID ${req.params.id}: ${error}`,
+      });
+    }
+  };
 
 
-  export { getAll, findOne, deleteWarehouse  };
+
+  export { getAll, findOneWarehouse, deleteWarehouse, getWareHouseInventory };
