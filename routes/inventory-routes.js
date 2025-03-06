@@ -4,10 +4,9 @@ import validateInventory from "../middleware/validateInventory.js";
 
 const router = express.Router();
 
-router.post(
-  "/api/inventories",
-  validateInventory,
-  inventoryController.addInventory
-);
+router
+  .route("/api/inventories")
+  .get(inventoryController.getInventories)
+  .post(validateInventory,inventoryController.addInventory);
 
 export default router;
