@@ -1,9 +1,21 @@
-import knex from "../knexfile.js";
+import initKnex from "knex";
+import configuration from "../knexfile.js";
+
+const knex = initKnex(configuration);
 
 const addInventory = async (req, res) => {
+  const { warehouse_id, item_name, description, category, status, quantity } =
+    req.body;
+
   try {
+    const warehouseExists = await knex("warehouses".where({ id: warehouse_id }));
+    if (!warehouseExists) {
+      return res.status(400).json({message: "Invalid warehouse_id."})
+    }
+
     const result = await knex("inventories").insert(req.body);
     const newInventoryId = result[0];
+
     const newInventory = await knex("inventories").where({
       id: newInventoryId,
     });

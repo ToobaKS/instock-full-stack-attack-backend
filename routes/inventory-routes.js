@@ -1,5 +1,5 @@
 import express from "express";
-import * as inventoryController from "../controllers/inventory-contoller.js";
+import * as inventoryController from "../controllers/inventory-controller.js";
 import validateInventory from "../middleware/validateInventory.js";
 
 const router = express.Router();
