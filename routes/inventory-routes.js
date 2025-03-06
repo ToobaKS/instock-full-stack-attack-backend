@@ -1,8 +1,13 @@
-import express from 'express';
-import * from "../controllers/inventory-contoller";
+import express from "express";
+import * as inventoryController from "../controllers/inventory-controller.js";
+import validateInventory from "../middleware/validateInventory.js";
 
 const router = express.Router();
 
-router
-    .route("/api/inventories")
-    .get()
+router.post(
+  "/api/inventories",
+  validateInventory,
+  inventoryController.addInventory
+);
+
+export default router;
