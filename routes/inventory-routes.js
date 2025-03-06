@@ -9,6 +9,8 @@ router
   .get(inventoryController.getInventories)
   .post(validateInventory, inventoryController.addInventory);
 
-router.delete("/api/inventories/:id", inventoryController.deleteInventory);
+router
+  .get("/api/inventories/:id", inventoryController.getInventoryItem)
+  .delete("/api/inventories/:id", inventoryController.deleteInventory);
 
 export default router;
