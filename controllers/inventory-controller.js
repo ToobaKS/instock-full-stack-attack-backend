@@ -8,7 +8,7 @@ const addInventory = async (req, res) => {
     req.body;
 
   try {
-    const warehouseExists = await knex("warehouses".where({ id: warehouse_id }));
+    const warehouseExists = await knex("warehouses").where({ id: warehouse_id }).first();
     if (!warehouseExists) {
       return res.status(400).json({message: "Invalid warehouse_id."})
     }
