@@ -64,6 +64,17 @@ const getAll = async (_req, res) => {
     }
   };
 
+  const addWarehouse = async (req, res) => {
+    try {
+      const result = await knex("warehouses").insert(req.body);
+      const newWarehouseId = result[0];
+      const newWarehouse = await knex("warehouses").where({ id: newWarehouseId });
+  
+      res.status(201).json(newWarehouse);
+    } catch (error) {
+      res.status(500).json({ message: `Unable to create new warehouse: ${error}`,
+      });
+    }
+  };
 
-
-  export { getAll, findOneWarehouse, deleteWarehouse, getWareHouseInventory };
+  export { getAll, findOneWarehouse, deleteWarehouse, getWareHouseInventory, addWarehouse };
