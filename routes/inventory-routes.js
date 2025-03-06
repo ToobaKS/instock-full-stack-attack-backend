@@ -7,6 +7,8 @@ const router = express.Router();
 router
   .route("/api/inventories")
   .get(inventoryController.getInventories)
-  .post(validateInventory,inventoryController.addInventory);
+  .post(validateInventory, inventoryController.addInventory);
+
+router.delete("/api/inventories/:id", inventoryController.deleteInventory);
 
 export default router;
