@@ -5,20 +5,42 @@ const knex = initKnex(configuration);
 
 const getAll = async (req, res) => {
   try {
-    let query = knex('warehouses').select('*'); 
+    let query = knex("warehouses").select("*");
 
     if (req.query.s) {
       const searchTerm = `%${req.query.s}%`;
-      query.where(function() {
-        this.where('LOWER(warehouse_name) LIKE ?',[searchTerm])
-          .orWhere('LOWER(address) LIKE ?', [searchTerm])
-          .orWhere('LOWER(city) LIKE ?', [searchTerm])
-          .orWhere('LOWER(country) LIKE ?',[searchTerm])
-          .orWhere('LOWER(contact_name) LIKE ?', [searchTerm])
-          .orWhere('LOWER(contact_position) LIKE ?', [searchTerm])
-          .orWhere('LOWER(contact_phone) LIKE ?', [searchTerm])
-          .orWhere('LOWER(contact_email) LIKE ?', [searchTerm])
-      })
+      query.where(function () {
+        this.where("LOWER(warehouse_name) LIKE ?", [searchTerm])
+          .orWhere("LOWER(address) LIKE ?", [searchTerm])
+          .orWhere("LOWER(city) LIKE ?", [searchTerm])
+          .orWhere("LOWER(country) LIKE ?", [searchTerm])
+          .orWhere("LOWER(contact_name) LIKE ?", [searchTerm])
+          .orWhere("LOWER(contact_position) LIKE ?", [searchTerm])
+          .orWhere("LOWER(contact_phone) LIKE ?", [searchTerm])
+          .orWhere("LOWER(contact_email) LIKE ?", [searchTerm]);
+      });
+    }
+
+    if (req.query.sort_by) {
+      const validColumns = [
+        "warehouse_name",
+        "address",
+        "city",
+        "country",
+        "contact_name",
+        "contact_position",
+        "contact_phone",
+        "contact_email",
+      ];
+
+      const column = req.query.sort_by;
+
+      if (!validColumns.includes(column)) {
+        return res.status(400).json({ message: "Invalid sort_by column" });
+      }
+
+      const order = req.query.order_by === "desc" ? "desc" : "asc";
+      query.orderBy(column, order);
     }
 
     const results = await query;
@@ -26,7 +48,7 @@ const getAll = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error fetching data", error });
   }
-}
+};
 
 const findOneWarehouse = async (req, res) => {
   try {
@@ -147,7 +169,6 @@ const editWarehouse = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 export {
   getAll,
