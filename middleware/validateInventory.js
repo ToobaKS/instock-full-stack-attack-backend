@@ -20,4 +20,17 @@ const validateInventory = (req, res, next) => {
   next();
 };
 
-export default validateInventory;
+const validateInventorySearch = (req, res, next) => {
+  if (req.query.s && req.query.s.length > 100) {
+    return res.status(400).json({ 
+      error: "Search term exceeds maximum length (100 characters)"
+    });
+  }
+  next();
+};
+
+
+export {
+  validateInventory,
+  validateInventorySearch
+};
