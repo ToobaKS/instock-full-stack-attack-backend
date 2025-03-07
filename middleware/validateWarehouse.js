@@ -35,4 +35,14 @@ const validateWarehouse = (req, res, next) => {
   next();
 };
 
-export default validateWarehouse;
+const validateSearchWarehouse = (req, res, next) => {
+  if (req.query.s && req.query.s.length > 100) {
+    return res.status(400).json({ message: "Search term too long (max 100 chars)" });
+  }
+  next();
+};
+
+export {
+  validateWarehouse, 
+  validateSearchWarehouse ,
+};

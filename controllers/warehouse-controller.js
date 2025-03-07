@@ -3,14 +3,30 @@ import configuration from "../knexfile.js";
 
 const knex = initKnex(configuration);
 
-const getAll = async (_req, res) => {
+const getAll = async (req, res) => {
   try {
-    const data = await knex("warehouses");
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving warehouses: ${err}`);
+    let query = knex('warehouses').select('*'); 
+
+    if (req.query.s) {
+      const searchTerm = `%${req.query.s}%`;
+      query.where(function() {
+        this.where('warehouse_name', 'like', searchTerm)
+          .orWhere('address', 'like', searchTerm)
+          .orWhere('city', 'like', searchTerm)
+          .orWhere('country', 'like', searchTerm)
+          .orWhere('contact_name', 'like', searchTerm)
+          .orWhere('contact_position', 'like', searchTerm)
+          .orWhere('contact_phone', 'like', searchTerm)
+          .orWhere('contact_email', 'like', searchTerm)
+      })
+    }
+
+    const results = await query;
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching data", error });
   }
-};
+}
 
 const findOneWarehouse = async (req, res) => {
   try {
@@ -131,6 +147,7 @@ const editWarehouse = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export {
   getAll,

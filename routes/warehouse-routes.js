@@ -1,10 +1,11 @@
 import express from "express";
 import * as warehouseController from "../controllers/warehouse-controller.js";
-import validateWarehouse from "../middleware/validateWarehouse.js";
+import {validateWarehouse, validateSearchWarehouse} from "../middleware/validateWarehouse.js";
 
 const router = express.Router();
 
-router.route("/api/warehouses").get(warehouseController.getAll);
+router.route("/api/warehouses").
+  get(validateSearchWarehouse, warehouseController.getAll);
 
 router
   .route("/api/warehouses")
