@@ -8,16 +8,16 @@ const getAll = async (req, res) => {
     let query = knex("warehouses").select("*");
 
     if (req.query.s) {
-      const searchTerm = `%${req.query.s}%`;
+      const searchTerm = `%${req.query.s.toLowerCase()}%`;
       query.where(function () {
-        this.where("LOWER(warehouse_name) LIKE ?", [searchTerm])
-          .orWhere("LOWER(address) LIKE ?", [searchTerm])
-          .orWhere("LOWER(city) LIKE ?", [searchTerm])
-          .orWhere("LOWER(country) LIKE ?", [searchTerm])
-          .orWhere("LOWER(contact_name) LIKE ?", [searchTerm])
-          .orWhere("LOWER(contact_position) LIKE ?", [searchTerm])
-          .orWhere("LOWER(contact_phone) LIKE ?", [searchTerm])
-          .orWhere("LOWER(contact_email) LIKE ?", [searchTerm]);
+        this.whereRaw("LOWER(warehouse_name) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(address) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(city) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(country) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(contact_name) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(contact_position) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(contact_phone) LIKE ?", [searchTerm])
+          .orWhereRaw("LOWER(contact_email) LIKE ?", [searchTerm]);
       });
     }
 
@@ -40,7 +40,7 @@ const getAll = async (req, res) => {
       }
 
       const order = req.query.order_by === "desc" ? "desc" : "asc";
-      query.orderBy(column, order);
+      query = query.orderBy(column, order);
     }
 
     const results = await query;
