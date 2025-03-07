@@ -32,10 +32,31 @@ const addInventory = async (req, res) => {
 
 const getInventories = async (req, res) => {
   try {
-    const data = await knex("inventories");
+    let query = knex("inventories")
+      .select(
+        "inventories.*",
+        "warehouses.warehouse_name"
+      )
+      .leftJoin("warehouses", "inventories.warehouse_id", "warehouses.id");
+
+    if (req.query.s) {
+      const searchTerm = `%${req.query.s}%`; 
+      query = query.where(function() {
+        this.where(knex.raw('LOWER(inventories.item_name) LIKE ?', [searchTerm]))
+          .orWhere(knex.raw('LOWER(inventories.description) LIKE ?', [searchTerm]))
+          .orWhere(knex.raw('LOWER(inventories.category) LIKE ?', [searchTerm]))
+          .orWhere(knex.raw('LOWER(warehouses.warehouse_name) LIKE ?', [searchTerm]));
+      });
+    }
+
+    const data = await query;
     res.status(200).json(data);
   } catch (error) {
-    res.status(400).send(`Error retrieving inventories: ${error}`);
+    console.error("Search Error:", error);
+    res.status(500).json({ 
+      message: "Error retrieving inventories",
+      error: error.message 
+    });
   }
 };
 

@@ -10,14 +10,14 @@ const getAll = async (req, res) => {
     if (req.query.s) {
       const searchTerm = `%${req.query.s}%`;
       query.where(function() {
-        this.where('warehouse_name', 'like', searchTerm)
-          .orWhere('address', 'like', searchTerm)
-          .orWhere('city', 'like', searchTerm)
-          .orWhere('country', 'like', searchTerm)
-          .orWhere('contact_name', 'like', searchTerm)
-          .orWhere('contact_position', 'like', searchTerm)
-          .orWhere('contact_phone', 'like', searchTerm)
-          .orWhere('contact_email', 'like', searchTerm)
+        this.where('LOWER(warehouse_name) LIKE ?',[searchTerm])
+          .orWhere('LOWER(address) LIKE ?', [searchTerm])
+          .orWhere('LOWER(city) LIKE ?', [searchTerm])
+          .orWhere('LOWER(country) LIKE ?',[searchTerm])
+          .orWhere('LOWER(contact_name) LIKE ?', [searchTerm])
+          .orWhere('LOWER(contact_position) LIKE ?', [searchTerm])
+          .orWhere('LOWER(contact_phone) LIKE ?', [searchTerm])
+          .orWhere('LOWER(contact_email) LIKE ?', [searchTerm])
       })
     }
 
