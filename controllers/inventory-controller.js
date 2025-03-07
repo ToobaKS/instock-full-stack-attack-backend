@@ -60,10 +60,12 @@ const getInventories = async (req, res) => {
       "quantity",
       "warehouse_name",
     ];
-    const column = validColumns.includes(sort_by) ? sort_by : "id";
-    const order = order_by === "desc" ? "desc" : "asc";
 
-    query = query.orderBy(column, order);
+    if (sort_by && validColumns.includes(sort_by)) {
+      const order = order_by === "desc" ? "desc" : "asc";
+
+      query = query.orderBy(sort_by, order);
+    }
 
     const data = await query;
     res.status(200).json(data);
