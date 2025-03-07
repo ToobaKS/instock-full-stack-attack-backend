@@ -113,4 +113,53 @@ const deleteInventory = async (req, res) => {
   }
 };
 
-export { addInventory, getInventories, getInventoryItem, deleteInventory };
+const editInventory = async (req, res) => {
+  const { id } = req.params;
+  const { warehouse_id, item_name, description, category, status, quantity } =
+    req.body;
+
+  try {
+    // Check if the inventory item exists
+    const inventoryItem = await knex("inventories").where({ id }).first();
+    if (!inventoryItem) {
+      return res.status(404).json({
+        message: `Inventory item with ID ${id} not found.`,
+      });
+    }
+
+    // Check if the warehouse exists
+    const warehouseExists = await knex("warehouses")
+      .where({ id: warehouse_id })
+      .first();
+    if (!warehouseExists) {
+      return res.status(400).json({ message: "Invalid warehouse_id." });
+    }
+
+    // Update inventory item
+    await knex("inventories").where({ id }).update({
+      warehouse_id,
+      item_name,
+      description,
+      category,
+      status,
+      quantity,
+      updated_at: knex.fn.now(),
+    });
+
+    // Fetch and return the updated inventory item
+    const updatedInventory = await knex("inventories").where({ id }).first();
+    res.status(200).json(updatedInventory);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to update inventory item with ID ${id}: ${error}`,
+    });
+  }
+};
+
+export {
+  addInventory,
+  getInventories,
+  getInventoryItem,
+  deleteInventory,
+  editInventory,
+};
