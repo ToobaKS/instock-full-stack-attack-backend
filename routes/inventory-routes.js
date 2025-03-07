@@ -11,6 +11,11 @@ router
 
 router
   .get("/api/inventories/:id", inventoryController.getInventoryItem)
-  .delete("/api/inventories/:id", inventoryController.deleteInventory);
+  .delete("/api/inventories/:id", inventoryController.deleteInventory)
+  .put(
+    "/api/inventories/:id",
+    validateInventory,
+    inventoryController.editInventory
+  );
 
 export default router;

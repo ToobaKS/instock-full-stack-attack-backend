@@ -14,7 +14,7 @@ router
   .route("/api/warehouses/:id")
   .get(warehouseController.findOneWarehouse)
   .delete(warehouseController.deleteWarehouse)
-  .put(warehouseController.editWarehouse)
+  .put(warehouseController.editWarehouse);
 
 router
   .route("/api/warehouses/:id/inventories")
