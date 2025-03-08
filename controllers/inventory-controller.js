@@ -55,6 +55,7 @@ const getInventories = async (req, res) => {
     const { sort_by, order_by } = req.query;
     const validColumns = [
       "id",
+      "item_name",
       "category",
       "status",
       "quantity",
