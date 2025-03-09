@@ -23,7 +23,7 @@ const validateWarehouse = (req, res, next) => {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  const phoneRegex = /^(\+1\s?)?(\(\d{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}$/;
+  const phoneRegex = /^(\+1\s?)?(\(\s?\d{3}\s?\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}$/;
   if (!phoneRegex.test(contact_phone)) {
     return res.status(400).json({ message: "Invalid phone number." });
   }
