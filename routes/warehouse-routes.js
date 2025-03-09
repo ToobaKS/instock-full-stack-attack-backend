@@ -19,6 +19,6 @@ router
 
 router
   .route("/api/warehouses/:id/inventories")
-  .get(warehouseController.getWareHouseInventory);
+  .get(warehouseController.getWarehouseInventory);
 
 export default router;

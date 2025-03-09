@@ -90,17 +90,27 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
-const getWareHouseInventory = async (req, res) => {
+const getWarehouseInventory = async (req, res) => {
   try {
-    const posts = await knex("warehouses")
-      .join("inventories", "inventories.warehouse_id", "warehouses.id")
-      .where({ warehouse_id: req.params.id });
+    const warehouseId = req.params.id;
+    let query = knex("inventories")
+      .select("*")
+      .where("warehouse_id", warehouseId);
 
-    res.json(posts);
+    if (req.query.sort_by) {
+      const validColumns = ["item_name", "category", "status", "quantity"];
+      const column = req.query.sort_by;
+      
+      if (validColumns.includes(column)) {
+        const order = req.query.order_by === "desc" ? "desc" : "asc";
+        query = query.orderBy(column, order);
+      }
+    }
+
+    const results = await query;
+    res.status(200).json(results);
   } catch (error) {
-    res.status(500).json({
-      message: `Unable to retrieve inventory for warehouse with ID ${req.params.id}: ${error}`,
-    });
+    res.status(500).json({ message: "Error fetching inventory", error });
   }
 };
 
@@ -174,7 +184,7 @@ export {
   getAll,
   findOneWarehouse,
   deleteWarehouse,
-  getWareHouseInventory,
+  getWarehouseInventory,
   addWarehouse,
   editWarehouse,
 };
